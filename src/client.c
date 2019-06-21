@@ -78,25 +78,31 @@ int main(int argc, char *argv[])
 {  
   int sockfd, numbytes;  
   char buf[BUFSIZE];
-
-  // if (argc != 2) {
-  //   fprintf(stderr,"usage: client HOSTNAME:PORT/PATH\n");
-  //   exit(1);
-  // }
+  urlinfo_t *url;
+  
+  if (argc != 2) {
+    fprintf(stderr,"usage: client HOSTNAME:PORT/PATH\n");
+    exit(1);
+  }
 
   /*
-    1. Parse the input URL
-    2. Initialize a socket by calling the `get_socket` function from lib.c
-    3. Call `send_request` to construct the request and send it
-    4. Call `recv` in a loop until there is no more data to receive from the server. Print the received response to stdout.
+    
     5. Clean up any allocated memory and open file descriptors.
   */
 
   ///////////////////
   // IMPLEMENT ME! //
   ///////////////////
-  char *str = "localhost:3490/d20";
-  parse_url(str);
 
+  // 1. Parse the input URL
+  url = parse_url(argv[1]);
+
+  // 2. Initialize a socket by calling the `get_socket` function from lib.c
+  sockfd = get_socket(url->hostname, url->port);
+
+  // 3. Call `send_request` to construct the request and send it
+  send_request(sockfd, url->hostname, url->port, url->path);
+  
+  // 4. Call `recv` in a loop until there is no more data to receive from the server. Print the received response to stdout.
   return 0;
 }
