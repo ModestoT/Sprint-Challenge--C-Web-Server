@@ -42,11 +42,18 @@ urlinfo_t *parse_url(char *url)
   hostname[(int)(path-hostname)] = '\0';
   // 4. Use strchr to find the first colon in the URL.
   port = strchr(hostname, ':');
+  
   // 5. Set the port pointer to 1 character after the spot returned by strchr.
-  urlinfo->port = port + 1;
-  // 6. Overwrite the colon with a '\0' so that we are just left with the hostname.
-  hostname[(int)(port-hostname)] = '\0';
-  urlinfo->hostname = hostname;
+  if (port == NULL){
+    urlinfo->port = "80";
+    urlinfo->hostname = hostname;
+  } else {
+    urlinfo->port = port + 1;
+    // 6. Overwrite the colon with a '\0' so that we are just left with the hostname.
+    hostname[(int)(port-hostname)] = '\0';
+    urlinfo->hostname = hostname;
+  }
+  
 
   return urlinfo;
 }
