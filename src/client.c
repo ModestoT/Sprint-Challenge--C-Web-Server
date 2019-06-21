@@ -73,9 +73,11 @@ int send_request(int fd, char *hostname, char *port, char *path)
   int request_length = sprintf(request, 
     "GET /%s HTTP/1.1\n" 
     "Host: %s:%s\n" 
-    "Connection: close\n", path, hostname, port);
+    "Connection: close\n"
+    "\n", path, hostname, port);
 
   rv = send(fd, request, request_length, 0);
+  // printf("Request: %s\n", request);
 
   if (rv < 0){
     perror("send");
@@ -94,11 +96,6 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  /*
-    
-    
-  */
-
   ///////////////////
   // IMPLEMENT ME! //
   ///////////////////
@@ -110,7 +107,7 @@ int main(int argc, char *argv[])
 
   // 3. Call `send_request` to construct the request and send it
   send_request(sockfd, url->hostname, url->port, url->path);
-
+  
   // 4. Call `recv` in a loop until there is no more data to receive from the server. Print the received response to stdout.
   while((numbytes = recv(sockfd, buf, BUFSIZ - 1, 0)) > 0){
     fprintf(stdout, "%s\n", buf);
